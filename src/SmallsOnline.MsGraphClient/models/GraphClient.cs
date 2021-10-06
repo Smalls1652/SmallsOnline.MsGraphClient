@@ -6,8 +6,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.Identity.Client;
-
 namespace SmallsOnline.MsGraphClient.Models
 {
     using SmallsOnline.MsGraphClient.Models.Common;
@@ -20,7 +18,7 @@ namespace SmallsOnline.MsGraphClient.Models
         public GraphClient(Uri baseUri, string clientId, string tenantId, X509Certificate2 clientCertificate, ApiScopesConfig apiScopes)
         {
             BaseUri = baseUri;
-            httpClient = new HttpClient();
+            httpClient = new();
             httpClient.BaseAddress = baseUri;
             httpClient.DefaultRequestHeaders.Add("ConsistencyLevel", "eventual");
 
@@ -30,15 +28,28 @@ namespace SmallsOnline.MsGraphClient.Models
             IsConnected = true;
         }
 
-        public GraphClient(Uri baseUri, string clientId, string tenantId, string clientSecret, ApiScopesConfig apiScopes)
+
+        public GraphClient(Uri baseUri, string clientId, string tenantId, GraphClientCredentialType credentialType, string clientSecret, ApiScopesConfig apiScopes)
         {
             BaseUri = baseUri;
-            httpClient = new HttpClient();
+            httpClient = new();
             httpClient.BaseAddress = baseUri;
             httpClient.DefaultRequestHeaders.Add("ConsistencyLevel", "eventual");
 
-            ConfidentialClientApp = new ConfidentialClientAppWithSecret(clientId, tenantId, clientSecret, apiScopes);
-            ConfidentialClientApp.Connect();
+            switch (credentialType)
+            {
+                case GraphClientCredentialType.CertificateThumbprint:
+                    X509Certificate2 cert = GetCertificate(clientSecret);
+
+                    ConfidentialClientApp = new ConfidentialClientAppWithCertificate(clientId, tenantId, cert, apiScopes);
+                    ConfidentialClientApp.Connect();
+                    break;
+
+                default:
+                    ConfidentialClientApp = new ConfidentialClientAppWithSecret(clientId, tenantId, clientSecret, apiScopes);
+                    ConfidentialClientApp.Connect();
+                    break;
+            }
 
             IsConnected = true;
         }
@@ -47,7 +58,7 @@ namespace SmallsOnline.MsGraphClient.Models
 
         public bool IsConnected { get; set; }
 
-        private IConfidentialClientAppConfig ConfidentialClientApp;
+        private readonly IConfidentialClientAppConfig ConfidentialClientApp;
 
         private static HttpClient httpClient;
 
@@ -61,14 +72,14 @@ namespace SmallsOnline.MsGraphClient.Models
                 ConfidentialClientApp.Connect();
             }
 
-            HttpRequestMessage requestMessage = new HttpRequestMessage(httpMethod, endpoint);
+            HttpRequestMessage requestMessage = new(httpMethod, endpoint);
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.ConfidentialClientApp.AuthenticationResult.AccessToken);
 
             switch (String.IsNullOrEmpty(apiPostBody))
             {
                 case false:
                     requestMessage.Content = new StringContent(apiPostBody);
-                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    requestMessage.Content.Headers.ContentType = new("application/json");
                     break;
 
                 default:
@@ -95,7 +106,19 @@ namespace SmallsOnline.MsGraphClient.Models
                     default:
                         isFinished = true;
 
-                        apiResponse = responseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        Task<string> apiResponseReadTask = Task.Run(
+                            async () =>
+                            {
+                                string response = await responseMessage.Content.ReadAsStringAsync();
+
+                                return response;
+                            }
+                        );
+
+                        apiResponseReadTask.Wait();
+                        apiResponse = apiResponseReadTask.Result;
+
+                        apiResponseReadTask.Dispose();
                         responseMessage.Dispose();
                         break;
                 }
@@ -104,6 +127,35 @@ namespace SmallsOnline.MsGraphClient.Models
             requestMessage.Dispose();
 
             return apiResponse;
+        }
+
+        private static X509Certificate2 GetCertificate(string thumprint)
+        {
+            X509Certificate2 cert;
+
+            using (X509Store certStore = new(StoreLocation.LocalMachine))
+            {
+                try
+                {
+                    certStore.Open(OpenFlags.ReadOnly);
+
+                    X509Certificate2Collection certsInStore = certStore.Certificates;
+                    X509Certificate2Collection foundCerts = certsInStore.Find(X509FindType.FindByThumbprint, thumprint, false);
+
+                    if (foundCerts.Count != 1)
+                    {
+                        throw new Exception("Too many certificates were returned with the same thumbprint or no certificates were found.");
+                    }
+
+                    cert = foundCerts[0];
+                }
+                finally
+                {
+                    certStore.Close();
+                }
+            }
+
+            return cert;
         }
     }
 }
