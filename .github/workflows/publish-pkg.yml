@@ -1,0 +1,24 @@
+name: .NET
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Configure GitHub package source
+      run: dotnet nuget add source --username Smalls1652 --password ${{ secrets.PKG_MGMT_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Smalls1652/index.json"
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Create .nupkg
+      run: dotnet pack --configuration Release --no-restore
+    - name: Push to package registry
+      run: dotnet nuget push --source github
