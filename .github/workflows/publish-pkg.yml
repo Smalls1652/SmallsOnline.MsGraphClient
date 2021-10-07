@@ -1,12 +1,14 @@
 name: Build and push package to GitHub
 
-on:
-  workflow_dispatch
+on: [ workflow_dispatch ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
     - uses: actions/checkout@v2
@@ -15,10 +17,10 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Configure GitHub package source
-      run: dotnet nuget add source --username Smalls1652 --password ${{ secrets.PKG_MGMT_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Smalls1652/index.json"
+      run: dotnet nuget add source --username Smalls1652 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Smalls1652/index.json"
     - name: Restore dependencies
       run: dotnet restore
     - name: Create .nupkg
-      run: dotnet pack --configuration Release --no-restore
+      run: dotnet pack --configuration Release --no-restore --output .
     - name: Push to package registry
-      run: dotnet nuget push --source github
+      run: dotnet nuget push "*.nupkg" --source github --api-key ${{ secrets.GITHUB_TOKEN }}
