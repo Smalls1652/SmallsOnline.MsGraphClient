@@ -1,4 +1,4 @@
-name: .NET
+name: Build and push package to GitHub
 
 on:
   workflow_dispatch
