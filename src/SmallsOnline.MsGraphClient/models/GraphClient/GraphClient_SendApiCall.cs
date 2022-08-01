@@ -44,25 +44,25 @@ public partial class GraphClient : IGraphClient
         // Check the authentication status and, if needed, refresh the token used for authentication.
         CheckAuthStatus();
 
-        // Initialize the HttpRequestMessage with
-        // the HTTP method and the endpoint of the API to call.
-        HttpRequestMessage requestMessage = new(httpMethod, endpoint);
-
-        // Add the authentication token to request message's Authorization header.
-        requestMessage.Headers.Authorization = new("Bearer", _graphClientApp.AuthenticationResult.AccessToken);
-
-        // Set the content of the request message, if a value was provided for apiPostBody.
-        if (apiPostBody is not null && string.IsNullOrEmpty(apiPostBody) != true)
-        {
-            requestMessage.Content = new StringContent(apiPostBody);
-            requestMessage.Content.Headers.ContentType = new("application/json");
-        }
-
         // Start the process for sending the request message.
         // This will continue until 'isFinished' is set to true.
         bool isFinished = false;
         while (!isFinished)
         {
+            // Initialize the HttpRequestMessage with
+            // the HTTP method and the endpoint of the API to call.
+            HttpRequestMessage requestMessage = new(httpMethod, endpoint);
+
+            // Add the authentication token to request message's Authorization header.
+            requestMessage.Headers.Authorization = new("Bearer", _graphClientApp.AuthenticationResult.AccessToken);
+
+            // Set the content of the request message, if a value was provided for apiPostBody.
+            if (apiPostBody is not null && string.IsNullOrEmpty(apiPostBody) != true)
+            {
+                requestMessage.Content = new StringContent(apiPostBody);
+                requestMessage.Content.Headers.ContentType = new("application/json");
+            }
+
             // Send the request message and receive the response.
             HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
 
@@ -109,10 +109,10 @@ public partial class GraphClient : IGraphClient
                     isFinished = true;
                     break;
             }
-        }
 
-        // Dispose the request message.
-        requestMessage.Dispose();
+            // Dispose the request message.
+            requestMessage.Dispose();
+        }
 
         // Return the API's response.
         return apiResponse;
