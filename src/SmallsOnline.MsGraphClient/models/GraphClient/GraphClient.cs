@@ -34,6 +34,9 @@ public partial class GraphClient : IGraphClient
         }
     }
 
+    /// <summary>
+    /// Whether the GraphClient has been connected or not.
+    /// </summary>
     public bool IsConnected
     {
         get => _isConnected;

@@ -4,6 +4,12 @@ namespace SmallsOnline.MsGraphClient.Models;
 
 public partial class GraphClient : IGraphClient
 {
+    /// <summary>
+    /// Get a certificate from the local machine.
+    /// </summary>
+    /// <param name="thumprint">The certificate's thumbprint.</param>
+    /// <returns>A certificate.</returns>
+    /// <exception cref="Exception"></exception>
     private static X509Certificate2 GetCertificate(string thumprint)
     {
         X509Certificate2 cert;

@@ -5,6 +5,10 @@ namespace SmallsOnline.MsGraphClient.Models;
 
 public partial class GraphClient : IGraphClient
 {
+    /// <inheritdoc cref="SendApiCallAsync" />
+    /// /// <remarks>
+    /// This calls <see cref="SendApiCallAsync" />.
+    /// </remarks>
     public string? SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod)
     {
         Task<string?> sendApiCallAsyncTask = Task.Run(async () => await SendApiCallAsync(endpoint, apiPostBody, httpMethod));
@@ -12,6 +16,14 @@ public partial class GraphClient : IGraphClient
         return sendApiCallAsyncTask.Result;
     }
 
+    /// <summary>
+    /// Send an API call to Microsoft Graph.
+    /// </summary>
+    /// <param name="endpoint">The endpoint to send the API call to.</param>
+    /// <param name="apiPostBody">Content to be sent to the API, if needed.</param>
+    /// <param name="httpMethod">The HTTP method to use for sending the API call.</param>
+    /// <returns>Data returned by the API, if any was returned.</returns>
+    /// <exception cref="Exception"></exception>
     public async Task<string?> SendApiCallAsync(string endpoint, string apiPostBody, HttpMethod httpMethod)
     {
         if (_isConnected == false)

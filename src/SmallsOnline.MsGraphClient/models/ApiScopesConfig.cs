@@ -10,5 +10,8 @@ public class ApiScopesConfig
         Scopes = scopes;
     }
 
+    /// <summary>
+    /// A collection of scopes that client needs to use from the API.
+    /// </summary>
     public IEnumerable<string> Scopes { get; set; }
 }
