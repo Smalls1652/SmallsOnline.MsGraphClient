@@ -52,7 +52,7 @@ public partial class GraphClient : IGraphClient
 
     public bool IsConnected { get; set; }
 
-    private readonly IConfidentialClientAppConfig ConfidentialClientApp;
+    private readonly IGraphClientAppConfig ConfidentialClientApp;
 
     private static HttpClient httpClient;
 }
