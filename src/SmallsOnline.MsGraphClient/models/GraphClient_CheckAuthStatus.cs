@@ -1,5 +1,3 @@
-using System;
-
 namespace SmallsOnline.MsGraphClient.Models;
 
 public partial class GraphClient : IGraphClient

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace SmallsOnline.MsGraphClient.Models.Common
 {
     public interface IResponseCollection<T>

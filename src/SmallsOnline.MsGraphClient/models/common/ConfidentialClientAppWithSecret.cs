@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Microsoft.Identity.Client;
-
 namespace SmallsOnline.MsGraphClient.Models.Common
 {
     /// <summary>

@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using SmallsOnline.MsGraphClient.Models.Common;
 

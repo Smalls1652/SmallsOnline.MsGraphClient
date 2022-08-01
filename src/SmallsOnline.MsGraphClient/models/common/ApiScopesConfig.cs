@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SmallsOnline.MsGraphClient.Models.Common
 {
     /// <summary>

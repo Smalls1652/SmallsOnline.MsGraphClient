@@ -1,5 +1,3 @@
-using Microsoft.Identity.Client;
-
 namespace SmallsOnline.MsGraphClient.Models.Common
 {
     public interface IConfidentialClientAppConfig
