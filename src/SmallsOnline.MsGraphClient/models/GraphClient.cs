@@ -12,9 +12,7 @@ public partial class GraphClient : IGraphClient
     public GraphClient(Uri baseUri, string clientId, string tenantId, X509Certificate2 clientCertificate, ApiScopesConfig apiScopes)
     {
         BaseUri = baseUri;
-        _httpClient = new();
-        _httpClient.BaseAddress = baseUri;
-        _httpClient.DefaultRequestHeaders.Add("ConsistencyLevel", "eventual");
+        _httpClient = CreateHttpClient(baseUri);
 
         _graphClientApp = new GraphClientAppWithCertificate(clientId, tenantId, clientCertificate, apiScopes);
         _graphClientApp.Connect();
@@ -26,9 +24,7 @@ public partial class GraphClient : IGraphClient
     public GraphClient(Uri baseUri, string clientId, string tenantId, GraphClientCredentialType credentialType, string clientSecret, ApiScopesConfig apiScopes)
     {
         BaseUri = baseUri;
-        _httpClient = new();
-        _httpClient.BaseAddress = baseUri;
-        _httpClient.DefaultRequestHeaders.Add("ConsistencyLevel", "eventual");
+        _httpClient = CreateHttpClient(baseUri);
 
         switch (credentialType)
         {
