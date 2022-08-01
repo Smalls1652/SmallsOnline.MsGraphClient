@@ -5,12 +5,8 @@ namespace SmallsOnline.MsGraphClient.Models.Common;
 /// </summary>
 public class GraphClientAppWithSecret : GraphClientApp
 {
-    public GraphClientAppWithSecret(string clientId, string tenantId, string secret, ApiScopesConfig scopesConfig)
+    public GraphClientAppWithSecret(string clientId, string tenantId, string secret, ApiScopesConfig scopesConfig) : base(clientId, tenantId, scopesConfig)
     {
-        ClientId = clientId;
-        TenantId = tenantId;
-        ScopesConfig = scopesConfig;
-
         ConfidentialClientApp = ConfidentialClientApplicationBuilder.Create(ClientId)
             .WithClientSecret(secret)
             .Build();

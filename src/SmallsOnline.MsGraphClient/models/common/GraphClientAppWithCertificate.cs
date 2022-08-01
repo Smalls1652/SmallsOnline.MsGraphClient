@@ -7,12 +7,8 @@ namespace SmallsOnline.MsGraphClient.Models.Common;
 /// </summary>
 public class GraphClientAppWithCertificate : GraphClientApp
 {
-    public GraphClientAppWithCertificate(string clientId, string tenantId, X509Certificate2 clientCert, ApiScopesConfig scopesConfig)
+    public GraphClientAppWithCertificate(string clientId, string tenantId, X509Certificate2 clientCert, ApiScopesConfig scopesConfig) : base(clientId, tenantId, scopesConfig)
     {
-        ClientId = clientId;
-        TenantId = tenantId;
-        ScopesConfig = scopesConfig;
-
         ConfidentialClientApp = ConfidentialClientApplicationBuilder.Create(ClientId)
             .WithCertificate(clientCert)
             .Build();

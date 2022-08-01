@@ -2,6 +2,13 @@ namespace SmallsOnline.MsGraphClient.Models.Common;
 
 public abstract class GraphClientApp : IGraphClientApp
 {
+    public GraphClientApp(string clientId, string tenantId, ApiScopesConfig scopesConfig)
+    {
+        ClientId = clientId;
+        TenantId = tenantId;
+        ScopesConfig = scopesConfig;
+    }
+
     public string ClientId { get; set; } = null!;
 
     public string TenantId { get; set; } = null!;
