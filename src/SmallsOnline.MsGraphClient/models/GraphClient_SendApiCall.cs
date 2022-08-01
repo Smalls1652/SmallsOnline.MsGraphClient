@@ -14,6 +14,11 @@ public partial class GraphClient : IGraphClient
 
     public async Task<string?> SendApiCallAsync(string endpoint, string apiPostBody, HttpMethod httpMethod)
     {
+        if (_isConnected == false)
+        {
+            throw new Exception("The Graph client app has not been connected initially.");
+        }
+
         if (_graphClientApp.AuthenticationResult is null)
         {
             throw new Exception("AuthenticationResult is null. The GraphClientApp was potentially not connected.");

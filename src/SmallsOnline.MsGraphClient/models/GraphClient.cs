@@ -14,9 +14,6 @@ public partial class GraphClient : IGraphClient
         _httpClient = CreateHttpClient(baseUri);
 
         _graphClientApp = new GraphClientAppWithCertificate(clientId, tenantId, clientCertificate, apiScopes);
-        _graphClientApp.Connect();
-
-        IsConnected = true;
     }
 
 
@@ -30,19 +27,19 @@ public partial class GraphClient : IGraphClient
                 X509Certificate2 cert = GetCertificate(clientSecret);
 
                 _graphClientApp = new GraphClientAppWithCertificate(clientId, tenantId, cert, apiScopes);
-                _graphClientApp.Connect();
                 break;
 
             default:
                 _graphClientApp = new GraphClientAppWithSecret(clientId, tenantId, clientSecret, apiScopes);
-                _graphClientApp.Connect();
                 break;
         }
-
-        IsConnected = true;
     }
 
-    public bool IsConnected { get; set; }
+    public bool IsConnected
+    {
+        get => _isConnected;
+    }
+    private bool _isConnected = false;
 
     private readonly IGraphClientApp _graphClientApp;
     private readonly HttpClient _httpClient;
