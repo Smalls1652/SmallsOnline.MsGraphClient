@@ -7,7 +7,8 @@
     <PackageId>SmallsOnline.MsGraphClient</PackageId>
     <Authors>Tim Small</Authors>
     <Company>Smalls.Online</Company>
-    <Version>2021.10.4</Version>
+    <VersionPrefix>2022.08.00</VersionPrefix>
+    <VersionSuffix>beta01</VersionSuffix>
     <RepositoryUrl>https://github.com/Smalls1652/SmallsOnline.MsGraphClient</RepositoryUrl>
   </PropertyGroup>
 
