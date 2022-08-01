@@ -9,7 +9,7 @@ public partial class GraphClient : IGraphClient
     /// /// <remarks>
     /// This calls <see cref="SendApiCallAsync" />.
     /// </remarks>
-    public string? SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod)
+    public string? SendApiCall(string endpoint, string? apiPostBody, HttpMethod httpMethod)
     {
         Task<string?> sendApiCallAsyncTask = Task.Run(async () => await SendApiCallAsync(endpoint, apiPostBody, httpMethod));
 
@@ -24,7 +24,7 @@ public partial class GraphClient : IGraphClient
     /// <param name="httpMethod">The HTTP method to use for sending the API call.</param>
     /// <returns>Data returned by the API, if any was returned.</returns>
     /// <exception cref="Exception"></exception>
-    public async Task<string?> SendApiCallAsync(string endpoint, string apiPostBody, HttpMethod httpMethod)
+    public async Task<string?> SendApiCallAsync(string endpoint, string? apiPostBody, HttpMethod httpMethod)
     {
         // If the client hasn't been intially connected, throw an error.
         if (_isConnected == false)
@@ -52,15 +52,10 @@ public partial class GraphClient : IGraphClient
         requestMessage.Headers.Authorization = new("Bearer", _graphClientApp.AuthenticationResult.AccessToken);
 
         // Set the content of the request message, if a value was provided for apiPostBody.
-        switch (string.IsNullOrEmpty(apiPostBody))
+        if (apiPostBody is not null && string.IsNullOrEmpty(apiPostBody) != true)
         {
-            case false:
-                requestMessage.Content = new StringContent(apiPostBody);
-                requestMessage.Content.Headers.ContentType = new("application/json");
-                break;
-
-            default:
-                break;
+            requestMessage.Content = new StringContent(apiPostBody);
+            requestMessage.Content.Headers.ContentType = new("application/json");
         }
 
         // Start the process for sending the request message.
