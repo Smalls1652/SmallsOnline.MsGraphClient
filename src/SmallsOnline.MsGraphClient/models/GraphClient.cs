@@ -11,7 +11,6 @@ public partial class GraphClient : IGraphClient
 {
     public GraphClient(Uri baseUri, string clientId, string tenantId, X509Certificate2 clientCertificate, ApiScopesConfig apiScopes)
     {
-        BaseUri = baseUri;
         _httpClient = CreateHttpClient(baseUri);
 
         _graphClientApp = new GraphClientAppWithCertificate(clientId, tenantId, clientCertificate, apiScopes);
@@ -23,7 +22,6 @@ public partial class GraphClient : IGraphClient
 
     public GraphClient(Uri baseUri, string clientId, string tenantId, GraphClientCredentialType credentialType, string clientSecret, ApiScopesConfig apiScopes)
     {
-        BaseUri = baseUri;
         _httpClient = CreateHttpClient(baseUri);
 
         switch (credentialType)
@@ -43,8 +41,6 @@ public partial class GraphClient : IGraphClient
 
         IsConnected = true;
     }
-
-    public Uri BaseUri { get; set; }
 
     public bool IsConnected { get; set; }
 
