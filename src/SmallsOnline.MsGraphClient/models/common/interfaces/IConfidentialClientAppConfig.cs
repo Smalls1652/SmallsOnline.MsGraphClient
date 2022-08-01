@@ -14,6 +14,6 @@ namespace SmallsOnline.MsGraphClient.Models.Common
 
         void Connect();
 
-        void CreateClientApp();
+        Task ConnectAsync();
     }
 }
