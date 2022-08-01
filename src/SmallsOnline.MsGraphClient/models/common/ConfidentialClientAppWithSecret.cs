@@ -3,7 +3,7 @@ namespace SmallsOnline.MsGraphClient.Models.Common
     /// <summary>
     /// The confidential client app for authenticating to the Microsoft Graph API when utilizing an application secret.
     /// </summary>
-    public class ConfidentialClientAppWithSecret : IConfidentialClientAppConfig
+    public class ConfidentialClientAppWithSecret : IConfidentialClientApp
     {
         public ConfidentialClientAppWithSecret() {}
 
