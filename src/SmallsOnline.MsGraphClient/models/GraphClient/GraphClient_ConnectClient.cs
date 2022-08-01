@@ -21,6 +21,7 @@ public partial class GraphClient : IGraphClient
     {
         try
         {
+            // Start the authentication process.
             await _graphClientApp.ConnectAsync();
             _isConnected = true;
         }

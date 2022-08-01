@@ -13,6 +13,8 @@ public partial class GraphClient : IGraphClient
             throw new Exception("AuthenticationResult is null. The GraphClientApp was potentially not connected.");
         }
 
+        // Get the current date/time.
+        // If it's greater than the expiration date/time, then refresh the token.
         DateTimeOffset currentDateTime = DateTimeOffset.Now;
         if (currentDateTime >= _graphClientApp.AuthenticationResult.ExpiresOn)
         {

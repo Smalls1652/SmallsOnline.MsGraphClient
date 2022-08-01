@@ -20,14 +20,17 @@ public partial class GraphClient : IGraphClient
     {
         _httpClient = CreateHttpClient(baseUri);
 
+        // Evaluate how to create the GraphClientApp based off the credential type.
         switch (credentialType)
         {
+            // If it's a certificate thumbprint
             case GraphClientCredentialType.CertificateThumbprint:
                 X509Certificate2 cert = GetCertificate(clientSecret);
 
                 _graphClientApp = new GraphClientAppWithCertificate(clientId, tenantId, cert, apiScopes);
                 break;
 
+            // Otherwise, it's a secret.
             default:
                 _graphClientApp = new GraphClientAppWithSecret(clientId, tenantId, clientSecret, apiScopes);
                 break;

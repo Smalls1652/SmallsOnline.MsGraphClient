@@ -9,12 +9,18 @@ public partial class GraphClient : IGraphClient
     /// <returns>A <see cref="HttpClient" /> instance.</returns>
     private static HttpClient CreateHttpClient(Uri baseUri)
     {
+        // Create the HttpClient and set the BaseAddress property to
+        // the provided URI.
         HttpClient httpClient = new()
         {
             BaseAddress = baseUri
         };
+
+        // Add a default request header to set
+        // the 'ConsistencyLevel' to 'eventual'.
         httpClient.DefaultRequestHeaders.Add("ConsistencyLevel", "eventual");
 
+        // Return the created HttpClient.
         return httpClient;
     }
 }

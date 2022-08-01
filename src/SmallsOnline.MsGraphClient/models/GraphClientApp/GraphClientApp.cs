@@ -65,6 +65,8 @@ public abstract class GraphClientApp : IGraphClientApp
     {
         if (ConfidentialClientApp is not null)
         {
+            // If the ConfidentialClientApp property is not null,
+            // get an authentication token for the client app.
             AuthenticationResult? authResult;
 
             authResult = await ConfidentialClientApp.AcquireTokenForClient(scopes)
@@ -75,6 +77,8 @@ public abstract class GraphClientApp : IGraphClientApp
         }
         else
         {
+            // Otherwise, throw an error.
+            // Can't call the necessary method for acquiring a token if that's null, now can we?
             throw new NullReferenceException("The ConfidentialClientApp property is null.");
         }
     }
