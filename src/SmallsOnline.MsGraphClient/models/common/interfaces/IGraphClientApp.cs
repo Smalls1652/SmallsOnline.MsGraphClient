@@ -1,6 +1,6 @@
 namespace SmallsOnline.MsGraphClient.Models.Common
 {
-    public interface IGraphClientAppConfig
+    public interface IGraphClientApp
     {
         string ClientId { get; set; }
         
