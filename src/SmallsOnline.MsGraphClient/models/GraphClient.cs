@@ -16,7 +16,7 @@ public partial class GraphClient : IGraphClient
         httpClient.BaseAddress = baseUri;
         httpClient.DefaultRequestHeaders.Add("ConsistencyLevel", "eventual");
 
-        ConfidentialClientApp = new ConfidentialClientAppWithCertificate(clientId, tenantId, clientCertificate, apiScopes);
+        ConfidentialClientApp = new GraphClientAppWithCertificate(clientId, tenantId, clientCertificate, apiScopes);
         ConfidentialClientApp.Connect();
 
         IsConnected = true;
@@ -35,12 +35,12 @@ public partial class GraphClient : IGraphClient
             case GraphClientCredentialType.CertificateThumbprint:
                 X509Certificate2 cert = GetCertificate(clientSecret);
 
-                ConfidentialClientApp = new ConfidentialClientAppWithCertificate(clientId, tenantId, cert, apiScopes);
+                ConfidentialClientApp = new GraphClientAppWithCertificate(clientId, tenantId, cert, apiScopes);
                 ConfidentialClientApp.Connect();
                 break;
 
             default:
-                ConfidentialClientApp = new ConfidentialClientAppWithSecret(clientId, tenantId, clientSecret, apiScopes);
+                ConfidentialClientApp = new GraphClientAppWithSecret(clientId, tenantId, clientSecret, apiScopes);
                 ConfidentialClientApp.Connect();
                 break;
         }
@@ -52,7 +52,7 @@ public partial class GraphClient : IGraphClient
 
     public bool IsConnected { get; set; }
 
-    private readonly IGraphClientAppConfig ConfidentialClientApp;
+    private readonly IGraphClientApp ConfidentialClientApp;
 
     private static HttpClient httpClient;
 }
