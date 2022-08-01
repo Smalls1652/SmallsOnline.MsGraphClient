@@ -7,7 +7,7 @@ namespace SmallsOnline.MsGraphClient.Models
     {
         Uri BaseUri { get; set; }
 
-        Boolean IsConnected { get; set; }
+        bool IsConnected { get; set; }
 
         string SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod);
     }
