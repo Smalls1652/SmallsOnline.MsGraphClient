@@ -8,9 +8,9 @@ namespace SmallsOnline.MsGraphClient.Models.Common
 
         ApiScopesConfig ScopesConfig { get; set; }
 
-        IConfidentialClientApplication ConfidentialClientApp { get; set; }
+        IConfidentialClientApplication? ConfidentialClientApp { get; set; }
 
-        AuthenticationResult AuthenticationResult { get; set; }
+        AuthenticationResult? AuthenticationResult { get; set; }
 
         void Connect();
 

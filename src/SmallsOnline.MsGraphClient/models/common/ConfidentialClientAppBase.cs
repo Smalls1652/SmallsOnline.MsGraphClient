@@ -2,15 +2,15 @@ namespace SmallsOnline.MsGraphClient.Models.Common;
 
 public abstract class ConfidentialClientAppBase : IGraphClientAppConfig
 {
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = null!;
 
-    public string TenantId { get; set; }
+    public string TenantId { get; set; } = null!;
 
-    public ApiScopesConfig ScopesConfig { get; set; }
+    public ApiScopesConfig ScopesConfig { get; set; } = null!;
 
-    public IConfidentialClientApplication ConfidentialClientApp { get; set; }
+    public IConfidentialClientApplication? ConfidentialClientApp { get; set; }
 
-    public AuthenticationResult AuthenticationResult { get; set; }
+    public AuthenticationResult? AuthenticationResult { get; set; }
 
     public void Connect()
     {
@@ -26,12 +26,19 @@ public abstract class ConfidentialClientAppBase : IGraphClientAppConfig
 
     private async Task<AuthenticationResult> GetTokenForClientAsync(IEnumerable<string> scopes)
     {
-        AuthenticationResult? authResult;
+        if (ConfidentialClientApp is not null)
+        {
+            AuthenticationResult? authResult;
 
-        authResult = await ConfidentialClientApp.AcquireTokenForClient(scopes)
-            .WithAuthority(AzureCloudInstance.AzurePublic, TenantId)
-            .ExecuteAsync();
+            authResult = await ConfidentialClientApp.AcquireTokenForClient(scopes)
+                .WithAuthority(AzureCloudInstance.AzurePublic, TenantId)
+                .ExecuteAsync();
 
-        return authResult;
+            return authResult;
+        }
+        else
+        {
+            throw new NullReferenceException("The ConfidentialClientApp property is null.");
+        }
     }
 }
