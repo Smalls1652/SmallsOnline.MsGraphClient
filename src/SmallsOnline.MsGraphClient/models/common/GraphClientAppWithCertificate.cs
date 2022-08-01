@@ -3,11 +3,11 @@ using System.Security.Cryptography.X509Certificates;
 namespace SmallsOnline.MsGraphClient.Models.Common;
 
 /// <summary>
-/// The confidential client app for authenticating to the Microsoft Graph API when utilizing a certificate.
+/// The Graph client app for authenticating to the Microsoft Graph API when utilizing a certificate.
 /// </summary>
-public class ConfidentialClientAppWithCertificate : ConfidentialClientAppBase
+public class GraphClientAppWithCertificate : GraphClientApp
 {
-    public ConfidentialClientAppWithCertificate(string clientId, string tenantId, X509Certificate2 clientCert, ApiScopesConfig scopesConfig)
+    public GraphClientAppWithCertificate(string clientId, string tenantId, X509Certificate2 clientCert, ApiScopesConfig scopesConfig)
     {
         ClientId = clientId;
         TenantId = tenantId;

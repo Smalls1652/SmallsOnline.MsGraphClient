@@ -1,6 +1,6 @@
 namespace SmallsOnline.MsGraphClient.Models.Common;
 
-public abstract class ConfidentialClientAppBase : IGraphClientAppConfig
+public abstract class GraphClientApp : IGraphClientApp
 {
     public string ClientId { get; set; } = null!;
 
