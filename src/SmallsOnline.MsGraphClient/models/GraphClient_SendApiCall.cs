@@ -13,11 +13,7 @@ public partial class GraphClient : IGraphClient
     {
         string apiResponse = null;
 
-        DateTimeOffset currentDateTime = DateTimeOffset.Now;
-        if (currentDateTime >= ConfidentialClientApp.AuthenticationResult.ExpiresOn)
-        {
-            ConfidentialClientApp.Connect();
-        }
+        CheckAuthStatus();
 
         HttpRequestMessage requestMessage = new(httpMethod, endpoint);
         requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.ConfidentialClientApp.AuthenticationResult.AccessToken);
