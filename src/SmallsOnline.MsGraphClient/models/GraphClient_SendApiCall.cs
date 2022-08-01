@@ -5,14 +5,26 @@ namespace SmallsOnline.MsGraphClient.Models;
 
 public partial class GraphClient : IGraphClient
 {
-    public string SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod)
+    public string? SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod)
     {
-        string apiResponse = null;
+        Task<string?> sendApiCallAsyncTask = Task.Run(async () => await SendApiCallAsync(endpoint, apiPostBody, httpMethod));
+
+        return sendApiCallAsyncTask.Result;
+    }
+
+    public async Task<string?> SendApiCallAsync(string endpoint, string apiPostBody, HttpMethod httpMethod)
+    {
+        if (_graphClientApp.AuthenticationResult is null)
+        {
+            throw new Exception("AuthenticationResult is null. The GraphClientApp was potentially not connected.");
+        }
+
+        string? apiResponse = null;
 
         CheckAuthStatus();
 
         HttpRequestMessage requestMessage = new(httpMethod, endpoint);
-        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ConfidentialClientApp.AuthenticationResult.AccessToken);
+        requestMessage.Headers.Authorization = new("Bearer", _graphClientApp.AuthenticationResult.AccessToken);
 
         switch (string.IsNullOrEmpty(apiPostBody))
         {
@@ -26,17 +38,29 @@ public partial class GraphClient : IGraphClient
         }
 
         bool isFinished = false;
-        //HttpResponseMessage responseMessage;
 
         while (!isFinished)
         {
-            HttpResponseMessage responseMessage = httpClient.SendAsync(requestMessage).GetAwaiter().GetResult();
+            HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
 
             switch (responseMessage.StatusCode)
             {
                 case HttpStatusCode.TooManyRequests:
-                    RetryConditionHeaderValue retryAfterValue = responseMessage.Headers.RetryAfter;
-                    TimeSpan retryAfterBuffer = retryAfterValue.Delta.Value.Add(TimeSpan.FromSeconds(15));
+                    RetryConditionHeaderValue? retryAfterValue = responseMessage.Headers.RetryAfter;
+
+                    TimeSpan retryAfterBuffer;
+                    if (retryAfterValue is null || retryAfterValue.Delta is null)
+                    {
+                        retryAfterBuffer = new(
+                            hours: 0,
+                            minutes: 0,
+                            seconds: 30
+                        );
+                    }
+                    else
+                    {
+                        retryAfterBuffer = retryAfterValue.Delta.Value.Add(TimeSpan.FromSeconds(15));
+                    }
 
                     Console.WriteLine($"--- !!! Throttling for: {retryAfterBuffer.TotalSeconds} seconds !!! ---");
                     Thread.Sleep(retryAfterBuffer);
@@ -45,19 +69,7 @@ public partial class GraphClient : IGraphClient
                 default:
                     isFinished = true;
 
-                    Task<string> apiResponseReadTask = Task.Run(
-                        async () =>
-                        {
-                            string response = await responseMessage.Content.ReadAsStringAsync();
-
-                            return response;
-                        }
-                    );
-
-                    apiResponseReadTask.Wait();
-                    apiResponse = apiResponseReadTask.Result;
-
-                    apiResponseReadTask.Dispose();
+                    apiResponse = await responseMessage.Content.ReadAsStringAsync();
                     responseMessage.Dispose();
                     break;
             }

@@ -5,9 +5,9 @@ public partial class GraphClient : IGraphClient
     private void CheckAuthStatus()
     {
         DateTimeOffset currentDateTime = DateTimeOffset.Now;
-        if (currentDateTime >= ConfidentialClientApp.AuthenticationResult.ExpiresOn)
+        if (currentDateTime >= _graphClientApp.AuthenticationResult.ExpiresOn)
         {
-            ConfidentialClientApp.Connect();
+            _graphClientApp.Connect();
         }
     }
 }
