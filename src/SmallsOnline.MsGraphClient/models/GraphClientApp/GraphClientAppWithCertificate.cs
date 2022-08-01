@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-namespace SmallsOnline.MsGraphClient.Models.Common;
+namespace SmallsOnline.MsGraphClient.Models;
 
 /// <summary>
 /// The Graph client app for authenticating to the Microsoft Graph API when utilizing a certificate.

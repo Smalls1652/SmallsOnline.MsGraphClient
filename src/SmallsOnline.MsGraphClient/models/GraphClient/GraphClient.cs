@@ -1,5 +1,4 @@
 using System.Security.Cryptography.X509Certificates;
-using SmallsOnline.MsGraphClient.Models.Common;
 
 namespace SmallsOnline.MsGraphClient.Models;
 

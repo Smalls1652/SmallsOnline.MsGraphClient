@@ -1,4 +1,4 @@
-namespace SmallsOnline.MsGraphClient.Models.Common;
+namespace SmallsOnline.MsGraphClient.Models;
 
 public abstract class GraphClientApp : IGraphClientApp
 {

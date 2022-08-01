@@ -1,4 +1,4 @@
-namespace SmallsOnline.MsGraphClient.Models.Common;
+namespace SmallsOnline.MsGraphClient.Models;
 
 /// <summary>
 /// A collection of scopes to use when authenticating to the Microsoft Graph API.

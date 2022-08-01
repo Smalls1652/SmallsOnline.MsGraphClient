@@ -1,13 +1,12 @@
-namespace SmallsOnline.MsGraphClient.Models
+namespace SmallsOnline.MsGraphClient.Models;
+
+public interface IGraphClient
 {
-    public interface IGraphClient
-    {
-        bool IsConnected { get; }
+    bool IsConnected { get; }
 
-        void ConnectClient();
-        Task ConnectClientAsync();
+    void ConnectClient();
+    Task ConnectClientAsync();
 
-        string? SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod);
-        Task<string?> SendApiCallAsync(string endpoint, string apiPostBody, HttpMethod httpMethod);
-    }
+    string? SendApiCall(string endpoint, string apiPostBody, HttpMethod httpMethod);
+    Task<string?> SendApiCallAsync(string endpoint, string apiPostBody, HttpMethod httpMethod);
 }
