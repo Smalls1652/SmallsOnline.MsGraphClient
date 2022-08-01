@@ -16,7 +16,7 @@ public partial class GraphClient : IGraphClient
         CheckAuthStatus();
 
         HttpRequestMessage requestMessage = new(httpMethod, endpoint);
-        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.ConfidentialClientApp.AuthenticationResult.AccessToken);
+        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ConfidentialClientApp.AuthenticationResult.AccessToken);
 
         switch (string.IsNullOrEmpty(apiPostBody))
         {
