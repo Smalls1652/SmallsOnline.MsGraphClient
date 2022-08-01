@@ -18,7 +18,7 @@ public partial class GraphClient : IGraphClient
         HttpRequestMessage requestMessage = new(httpMethod, endpoint);
         requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.ConfidentialClientApp.AuthenticationResult.AccessToken);
 
-        switch (String.IsNullOrEmpty(apiPostBody))
+        switch (string.IsNullOrEmpty(apiPostBody))
         {
             case false:
                 requestMessage.Content = new StringContent(apiPostBody);
