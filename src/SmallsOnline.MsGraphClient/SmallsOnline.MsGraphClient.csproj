@@ -8,6 +8,7 @@
 
   <PropertyGroup>
     <PackageId>SmallsOnline.MsGraphClient</PackageId>
+    <Description>A Microsoft Graph API client, that I personally use, to reduce the amount of boilerplate code across many projects.</Description>
     <Authors>Tim Small</Authors>
     <Company>Smalls.Online</Company>
     <VersionPrefix>2022.08.00</VersionPrefix>
