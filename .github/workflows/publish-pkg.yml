@@ -1,6 +1,9 @@
 name: Build and push package to GitHub
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+  push:
+    tags: [ 'v*.*.*', 'v*.*.*-*' ]  
 
 jobs:
   build:
